@@ -93,7 +93,7 @@ def getData():
     return response
 
 @app.route("/api/deleteData", methods=['POST', 'GET'])
-def deleteData():
+def delete():
     if request.method == 'POST':
         req_json = request.get_json()
         language = req_json['language']
@@ -108,6 +108,39 @@ def deleteData():
     )
     return response
 
+# @app.route("/genres", methods=['GET'])
+# def genres():
+#     # if request.method == 'POST':
+#     #     req_json = request.get_json()
+#     #     language = req_json['language']
+#     #     genre = req_json['genre']
+#     #     name = req_json['name']
+#     #     resp = deleteData(language, genre, name)
+
+#     resp = ['Action', 'Horror']
+
+#     response = app.response_class(
+#         response=json.dumps(resp),
+#         status=200,
+#         mimetype='application/json'
+#     )
+#     return response
+
+@app.route("/genres", defaults={'genre': None}, methods=['GET'])
+def get_genre(genre):
+    if request.method == 'GET':
+        genre = request.args.get('genre')
+        if genre == None:
+            resp = ['Action', 'Horror']
+        else:
+            resp = [{"genre":"Horror","all":50,"few":[{"comments":[{"userName":"Rey","comment":"Star Blood"}],"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english"}]},{"genre":"Action","all":50,"few":[{"comments":[{"userName":"Switch","comment":"punchy"}],"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english"}]}]
+
+    response = app.response_class(
+        response=json.dumps(resp),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)

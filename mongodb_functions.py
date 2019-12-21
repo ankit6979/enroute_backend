@@ -11,7 +11,10 @@ def saveData(language, genre, name, url):
       resp = mycol.insert_one(base_document)
       resp = mycol.update_one({"_id" : 1 }, {"$set": {"lang." + language + "." + genre + "." + name : url}})
    else:
-      resp = mycol.update_one({"_id" : 1 }, {"$set": {"lang." + language + "." + genre + "." + name : url}})
+      resp = mycol.update_one({"_id" : 1 }, {"$set": {
+         "lang." + language + "." + genre + "." + "name" : name,
+         "lang." + language + "." + genre + "." + "url" : url,
+         }})
    print("saved")
    return resp 
 
