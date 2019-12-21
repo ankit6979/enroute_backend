@@ -30,7 +30,7 @@ def post_something():
     name = request.form.get('name')
     print(name)
     # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
-    if param:
+    if name:
         return jsonify({
             "Message": f"Welcome {name} to our awesome platform!!",
             # Add this option to distinct the POST request
