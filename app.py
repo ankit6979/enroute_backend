@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify
-# import json
+import json
 # from mongodb_functions import *
 
 app = Flask(__name__)
@@ -59,7 +59,7 @@ def get_genre(genre):
             resp = [{"genre":"Horror","all":50,"few":[{"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english","comments":[{"userName":"Rey","comment":"Star Blood"}]}]},{"genre":"Action","all":50,"few":[{"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english","comments":[{"userName":"Switch","comment":"punchy"}]}]}]
 
     response = app.response_class(
-        response=jsonify(resp),
+        response=json.dumps(resp),
         status=200,
         mimetype='application/json'
     )
@@ -75,7 +75,7 @@ def get_language():
             resp = [{"genre":"Horror","all":50,"few":[{"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english","comments":[{"userName":"Rey","comment":"  Star Blood"}]}]},{"genre":"Action","all":50,"few":[{"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english","comments":[{"userName":"Switch","comment":"punchy"}]}]}]
 
     response = app.response_class(
-        response=jsonify(resp),
+        response=json.dumps(resp),
         status=200,
         mimetype='application/json'
     )
