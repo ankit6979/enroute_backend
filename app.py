@@ -1,5 +1,8 @@
 # app.py
 from flask import Flask, request, jsonify
+import json
+from mongodb_functions import *
+
 app = Flask(__name__)
 
 @app.route('/getmsg/', methods=['GET'])
