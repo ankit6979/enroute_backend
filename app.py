@@ -65,10 +65,10 @@ def get_genre(genre):
     )
     return response
 
-@app.route("/languages", defaults={'languages': None}, methods=['GET'])
-def get_language():
+@app.route("/languages", defaults={'language': None}, methods=['GET'])
+def get_language(language):
     if request.method == 'GET':
-        language = request.args.get('languages')
+        language = request.args.get('language')
         if language == None:
             resp = ['English', 'Hindi']
         else:
