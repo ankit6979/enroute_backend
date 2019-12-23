@@ -1,6 +1,22 @@
 /* MediaObject */
 {
-    "_id" : "",
+    "_id" : "1",
+    "Name" : "",
+    "Language" : "",
+    "Genre" : "",
+    "url" : "",
+    "Views" : "",
+    "Viewers" : [],
+    "Likes" : "",
+    "PeopleLiked" : [],
+    "Comments" : [ 
+        {}
+    ],
+    "Description" : ""
+},
+
+{
+    "_id" : "2",
     "Name" : "",
     "Language" : "",
     "Genre" : "",
