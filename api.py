@@ -12,24 +12,36 @@ app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# @app.route("/api/ads", methods = ['POST', 'GET'])
-# def getData():
-#     if request.method == 'POST':
-#         req_json = request.get_json();
-#         path = req_json['ad_path']
-#         zipCode = req_json['zipcode']
-#         adCategory = req_json['ad_type']
-#         textContent = req_json['text_content']
-#         location = req_json['location']
+@app.route("/preferenceSelect", methods=['POST'])
+def updatePreference():
+    if request.method == 'POST':
+        req_json = request.get_json()
+        pnr = req_json['pnr']
+        name = req_json['name']
+        lang_pref = req_json['lang_pref']
+        genre_pref = req_json['genre_pref']
+    
+        response = app.response_class(
+            response=json.dumps(userPreference(pnr, name, lang_pref, genre_pref)),
+            status=200,
+            mimetype='application/json'
+        )
+    return response
 
-#         SaveInDB.saveData(path, zipCode, adCategory, textContent, location)
-#         return "It works!"
-
-#     if request.method == 'GET':
-#         group_name = request.args.get('dataBy')
-#         print(group_name)
-#         return json.dumps(SaveInDB.fetchData(group_name))
-
+@app.route("/login", methods=['POST'])
+def check():
+    if request.method == 'POST':
+        req_json = request.get_json()
+        pnr = req_json['pnr']
+        name = req_json['name']
+        seatno = req_json['seatno']
+    
+        response = app.response_class(
+            response=json.dumps(checkUser(pnr, name, seatno)),
+            status=200,
+            mimetype='application/json'
+        )
+    return response
 
 @app.route("/api/uploadFile", methods=['POST'])
 def upload_file():
@@ -107,24 +119,6 @@ def delete():
         mimetype='application/json'
     )
     return response
-
-# @app.route("/genres", methods=['GET'])
-# def genres():
-#     # if request.method == 'POST':
-#     #     req_json = request.get_json()
-#     #     language = req_json['language']
-#     #     genre = req_json['genre']
-#     #     name = req_json['name']
-#     #     resp = deleteData(language, genre, name)
-
-#     resp = ['Action', 'Horror']
-
-#     response = app.response_class(
-#         response=json.dumps(resp),
-#         status=200,
-#         mimetype='application/json'
-#     )
-#     return response
 
 @app.route("/genres", defaults={'genre': None}, methods=['GET'])
 def get_genre(genre):

@@ -4,6 +4,14 @@ myclient = pymongo.MongoClient()
 mydb = myclient["CentralEntertainment"]
 mycol = mydb["item"]
 
+def userPreference(pnr, name, lang_pref, genre_pref):
+   val = mydb['UserData'].update_one({"PNR":pnr, "Name":name}, {"$set": {"Lang_pref":lang_pref, "Genre_pref":genre_pref}})
+   return {"result":val.matched_count>0}
+
+def checkUser(pnr, name, seatno):
+   returnVal = mydb['UserCredential'].find({"Name":name, "PNR":pnr, "SeatNo":seatno}).count() > 0
+   return {"result":returnVal}
+
 def saveData(language, genre, name, url):
    base_document = {"_id": 1, "lang": {"hindi": {"sports": {}, "entertainment": {}, "documentry": {}, "news": {}}, "english": {"sports": {}, "entertainment": {}, "documentry": {}, "news": {}}}}
 
@@ -42,4 +50,5 @@ def queryData(language=None, genre=None):
    # elif (language != None) & (genre != None):
    #    resp = mycol.find_one({"_id" : 1}, {"_id" : 0,  "lang" + "." + language + "." + genre : 1})
    return video_list
-print(queryData())
+
+#print(userPreference('2', 'Raj', ['English'], ['Horror']))
