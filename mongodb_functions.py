@@ -4,6 +4,12 @@ myclient = pymongo.MongoClient()
 mydb = myclient["CentralEntertainment"]
 mycol = mydb["item"]
 
+def AddContent(pnr, media_id, viewflag, likeflag, comments, anonymousflag):
+   if(anonymousflag):
+      pnr = "Anonymous"
+   returnVal = mydb['MediaObject'].update_one({"_id":media_id}, {"$inc":{"Likes":likeflag, "Views":viewflag}, "$push":{"Viewers":pnr, "PeopleLiked":pnr, "Comments":{"pnr":pnr, "comments":comments}}})   
+   return {"result": returnVal.matched_count>0}
+
 def userPreference(pnr, name, lang_pref, genre_pref):
    val = mydb['UserData'].update_one({"PNR":pnr, "Name":name}, {"$set": {"Lang_pref":lang_pref, "Genre_pref":genre_pref}})
    return {"result":val.matched_count>0}

@@ -12,6 +12,24 @@ app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+@app.route("/content", methods=['POST'])
+def updateContent():
+    if request.method == 'POST':
+        req_json = request.get_json()
+        pnr = req_json['pnr']
+        media_id = req_json['mediaid']
+        viewflag = req_json['viewflag']
+        likeflag = req_json['likeflag']
+        comments = req_json['comments']
+        anonymousflag = req_json['aflag']
+    
+        response = app.response_class(
+            response=json.dumps(AddContent(pnr, media_id, viewflag, likeflag, comments, anonymousflag)),
+            status=200,
+            mimetype='application/json'
+        )
+    return response
+
 @app.route("/preferenceSelect", methods=['POST'])
 def updatePreference():
     if request.method == 'POST':
