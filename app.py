@@ -15,6 +15,12 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
+# A welcome message to test our server
+@app.route('/')
+def index():
+    return "<h1>Welcome to our server !!</h1>"
+
 @app.route("/content", methods=['POST'])
 def updateContent():
     if request.method == 'POST':
