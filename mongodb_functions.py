@@ -1,6 +1,6 @@
 import pymongo
 
-myclient = pymongo.MongoClient()
+myclient = pymongo.MongoClient("mongodb+srv://infy:infy123@cluster0-kfqgc.mongodb.net/digital_signage?retryWrites=true&w=majority")
 mydb = myclient["CentralEntertainment"]
 mycol = mydb["item"]
 
