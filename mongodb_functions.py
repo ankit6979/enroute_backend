@@ -2,7 +2,8 @@ import pymongo
 
 myclient = pymongo.MongoClient()
 mydb = myclient["CentralEntertainment"]
-mycol = mydb["item"]
+mycol = mydb["MediaObject"]
+id = 4
 
 def AddContent(pnr, media_id, viewflag, likeflag, comments, anonymousflag):
    if(anonymousflag):
@@ -18,17 +19,10 @@ def checkUser(pnr, name, seatno):
    returnVal = mydb['UserCredential'].find({"Name":name, "PNR":pnr, "SeatNo":seatno}).count() > 0
    return {"result":returnVal}
 
-def saveData(language, genre, name, url):
-   base_document = {"_id": 1, "lang": {"hindi": {"sports": {}, "entertainment": {}, "documentry": {}, "news": {}}, "english": {"sports": {}, "entertainment": {}, "documentry": {}, "news": {}}}}
-
-   if mycol.estimated_document_count() == 0:
-      resp = mycol.insert_one(base_document)
-      resp = mycol.update_one({"_id" : 1 }, {"$set": {"lang." + language + "." + genre + "." + name : url}})
-   else:
-      resp = mycol.update_one({"_id" : 1 }, {"$set": {
-         "lang." + language + "." + genre + "." + "name" : name,
-         "lang." + language + "." + genre + "." + "url" : url,
-         }})
+def saveData(language, genre, name, url, description, thumbnailurl):
+   global id
+   id += 1
+   resp = mydb['MediaObject'].insert({"_id":id, "Name":name, "Language":language, "Genre":genre, "url":url, "Views":0, "Viewers":[], "Likes":0, "PeopleLiked":[], "Comments":[{}],"Description":description, "ThumbnailUrl":thumbnailurl})
    print("saved")
    return resp 
 
