@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 import json
 # from mongodb_functions import *
 
-app = Flask(__name__)
+
 
 @app.route('/getmsg/', methods=['GET'])
 def respond():
@@ -80,6 +80,8 @@ def get_language(language):
         mimetype='application/json'
     )
     return response
+
+app = Flask(__name__)
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
