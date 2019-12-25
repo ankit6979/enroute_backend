@@ -138,14 +138,12 @@ def delete():
     )
     return response
 
-@app.route("/genres", defaults={'genre': None}, methods=['GET'])
-def get_genre(genre):
+@app.route("/genres", methods=['GET'])
+def get_genre():
     if request.method == 'GET':
         genre = request.args.get('genre')
-        if genre == None:
-            resp = ['Action', 'Horror']
-        else:
-            resp = [{"genre":"Horror","all":50,"few":[{"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english","comments":[{"userName":"Rey","comment":"Star Blood"}]}]},{"genre":"Action","all":50,"few":[{"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english","comments":[{"userName":"Switch","comment":"punchy"}]}]}]
+        resp = queryGenre(genre)
+        #resp = [{"genre":"Horror","all":50,"few":[{"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english","comments":[{"userName":"Rey","comment":"Star Blood"}]}]},{"genre":"Action","all":50,"few":[{"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english","comments":[{"userName":"Switch","comment":"punchy"}]}]}]
 
     response = app.response_class(
         response=json.dumps(resp),

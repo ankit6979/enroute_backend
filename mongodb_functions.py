@@ -61,5 +61,9 @@ def queryLanguage(language):
    resps = mydb['MediaObject'].find({"Language":language}, {"_id":1, "Name":1, "Genre":1, "url":1, "ThumbnailUrl":1 })
    return [resp for resp in resps]
 
+def queryGenre(genre):
+   resps = mydb['MediaObject'].find({"Genre":genre}, {"_id":1, "Name":1, "url":1, "ThumbnailUrl":1 })
+   return [resp for resp in resps]
+
 #docs = queryLanguage("English")
 #print([doc for doc in docs])
