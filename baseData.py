@@ -1,13 +1,13 @@
 /* MediaObject */
 {
     "_id" : "1",
-    "Name" : "",
-    "Language" : "",
-    "Genre" : "",
-    "url" : "",
-    "Views" : "",
+    "Name" : "ZNMD",
+    "Language" : "Hindi",
+    "Genre" : "Travel",
+    "url" : "C://movies",
+    "Views" : 0,
     "Viewers" : [],
-    "Likes" : "",
+    "Likes" : 0,
     "PeopleLiked" : [],
     "Comments" : [ 
         {}

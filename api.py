@@ -154,14 +154,12 @@ def get_genre(genre):
     )
     return response
 
-@app.route("/languages", defaults={'languages': None}, methods=['GET'])
+@app.route("/languages", methods=['GET'])
 def get_language():
     if request.method == 'GET':
-        language = request.args.get('languages')
-        if language == None:
-            resp = ['English', 'Hindi']
-        else:
-            resp = [{"genre":"Horror","all":50,"few":[{"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english","comments":[{"userName":"Rey","comment":"  Star Blood"}]}]},{"genre":"Action","all":50,"few":[{"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english","comments":[{"userName":"Switch","comment":"punchy"}]}]}]
+        language = request.args.get('language')
+        resp = queryLanguage(language)
+        #resp = [{"genre":"Horror","all":50,"few":[{"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english","comments":[{"userName":"Rey","comment":"  Star Blood"}]}]},{"genre":"Action","all":50,"few":[{"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english","comments":[{"userName":"Switch","comment":"punchy"}]}]}]
 
     response = app.response_class(
         response=json.dumps(resp),

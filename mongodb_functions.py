@@ -57,4 +57,9 @@ def queryData(language=None, genre=None):
    #    resp = mycol.find_one({"_id" : 1}, {"_id" : 0,  "lang" + "." + language + "." + genre : 1})
    return video_list
 
-#print(userPreference('2', 'Raj', ['English'], ['Horror']))
+def queryLanguage(language):
+   resps = mydb['MediaObject'].find({"Language":language}, {"_id":1, "Name":1, "Genre":1, "url":1, "ThumbnailUrl":1 })
+   return [resp for resp in resps]
+
+#docs = queryLanguage("English")
+#print([doc for doc in docs])
