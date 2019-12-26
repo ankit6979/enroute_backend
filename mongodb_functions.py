@@ -11,6 +11,33 @@ def AddContent(pnr, media_id, viewflag, likeflag, comments, anonymousflag):
    returnVal = mydb['MediaObject'].update_one({"_id":media_id}, {"$inc":{"Likes":likeflag, "Views":viewflag}, "$push":{"Viewers":pnr, "PeopleLiked":pnr, "Comments":{"pnr":pnr, "comments":comments}}})   
    return {"result": returnVal.matched_count>0}
 
+def getContent(pnr):
+   languages = mydb['UserData'].find({"PNR":pnr}, {"_id":0, "Lang_pref":1})
+   genres = mydb['UserData'].find({"PNR":pnr}, {"_id":0, "Genre_pref":1})
+   mediaObjects=[]
+   for lang in languages:
+      templang = lang['Lang_pref']
+   for gen in genres:
+      tempgen = gen['Genre_pref']
+   language = templang
+   genres = tempgen
+   resp = []
+   for genre in genres:
+      resps = mydb['MediaObject'].aggregate([{
+         "$match":{
+		      "$and":[
+			      {"Language":{"$in":language}},
+			      {"Genre":genre}
+		         ]
+	         }
+         },
+         {"$limit":2}
+      ])
+      for content in resps:
+         resp.append(content)
+   
+   return [respt for respt in resp]
+   
 def userPreference(pnr, name, lang_pref, genre_pref):
    val = mydb['UserData'].update_one({"PNR":pnr, "Name":name}, {"$set": {"Lang_pref":lang_pref, "Genre_pref":genre_pref}})
    return {"result":val.matched_count>0}
@@ -59,5 +86,5 @@ def queryGenre(genre):
    resps = mydb['MediaObject'].find({"Genre":genre}, {"_id":1, "Name":1, "url":1, "ThumbnailUrl":1 })
    return [resp for resp in resps]
 
-#docs = queryLanguage("English")
+#docs = getContent("1024586167")
 #print([doc for doc in docs])
