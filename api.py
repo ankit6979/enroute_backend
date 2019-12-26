@@ -12,6 +12,18 @@ app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+@app.route("/map", methods=['POST'])
+def getMap():
+    if request.method == 'POST':
+        req_json = request.get_json()
+        pnr = req_json['pnr']
+        response = app.response_class(
+            response=json.dumps(getCoordinates(pnr)),
+            status=200,
+            mimetype='application/json'
+        )
+    return response
+
 @app.route("/home", methods=['POST'])
 def home():
     if request.method == 'POST':

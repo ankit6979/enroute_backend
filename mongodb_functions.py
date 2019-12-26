@@ -3,7 +3,11 @@ import pymongo
 myclient = pymongo.MongoClient()
 mydb = myclient["CentralEntertainment"]
 mycol = mydb["MediaObject"]
-id = 4
+id = 17
+
+def getCoordinates(pnr):
+   resp = mydb["Map"].find_one({"PNR":pnr}, {"_id":0})
+   return resp
 
 def AddContent(pnr, media_id, viewflag, likeflag, comments, anonymousflag):
    if(anonymousflag):
