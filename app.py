@@ -21,6 +21,30 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     return "<h1>Welcome to our server !!</h1>"
 
+@app.route("/map", methods=['POST'])
+def getMap():
+    if request.method == 'POST':
+        req_json = request.get_json()
+        pnr = req_json['pnr']
+        response = app.response_class(
+            response=json.dumps(getCoordinates(pnr)),
+            status=200,
+            mimetype='application/json'
+        )
+    return response
+
+@app.route("/home", methods=['POST'])
+def home():
+    if request.method == 'POST':
+        req_json = request.get_json()
+        pnr = req_json['pnr']
+        response = app.response_class(
+            response=json.dumps(getContent(pnr)),
+            status=200,
+            mimetype='application/json'
+        )
+    return response
+
 @app.route("/content", methods=['POST'])
 def updateContent():
     if request.method == 'POST':
@@ -94,8 +118,9 @@ def save():
         genre = req_json['genre']
         name = req_json['name']
         url = req_json['url']
-
-        saveData(language, genre, name, url)
+        description = req_json['description']
+        thumbnailurl = req_json['thumbnail']
+        saveData(language, genre, name, url, description, thumbnailurl)
 
         response = app.response_class(
             response=json.dumps(req_json),
