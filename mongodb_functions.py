@@ -10,12 +10,45 @@ mydb = myclient["CentralEntertainment"]
 mycol = mydb["item"]
 
 
+def getCoordinates(pnr):
+    resp = mydb["Map"].find_one({"PNR": pnr}, {"_id": 0})
+    return resp
+
+
 def AddContent(pnr, media_id, viewflag, likeflag, comments, anonymousflag):
     if(anonymousflag):
         pnr = "Anonymous"
     returnVal = mydb['MediaObject'].update_one({"_id": media_id}, {"$inc": {"Likes": likeflag, "Views": viewflag}, "$push": {
                                                "Viewers": pnr, "PeopleLiked": pnr, "Comments": {"pnr": pnr, "comments": comments}}})
     return {"result": returnVal.matched_count > 0}
+
+
+def getContent(pnr):
+    languages = mydb['UserData'].find({"PNR": pnr}, {"_id": 0, "Lang_pref": 1})
+    genres = mydb['UserData'].find({"PNR": pnr}, {"_id": 0, "Genre_pref": 1})
+    mediaObjects = []
+    for lang in languages:
+        templang = lang['Lang_pref']
+    for gen in genres:
+        tempgen = gen['Genre_pref']
+    language = templang
+    genres = tempgen
+    resp = []
+    for genre in genres:
+        resps = mydb['MediaObject'].aggregate([{
+            "$match": {
+                "$and": [
+                    {"Language": {"$in": language}},
+                    {"Genre": genre}
+                ]
+            }
+        },
+            {"$limit": 2}
+        ])
+        for content in resps:
+            resp.append(content)
+
+    return [respt for respt in resp]
 
 
 def userPreference(pnr, name, lang_pref, genre_pref):
@@ -30,19 +63,11 @@ def checkUser(pnr, name, seatno):
     return {"result": returnVal}
 
 
-def saveData(language, genre, name, url):
-    base_document = {"_id": 1, "lang": {"hindi": {"sports": {}, "entertainment": {}, "documentry": {
-    }, "news": {}}, "english": {"sports": {}, "entertainment": {}, "documentry": {}, "news": {}}}}
-
-    if mycol.estimated_document_count() == 0:
-        resp = mycol.insert_one(base_document)
-        resp = mycol.update_one(
-            {"_id": 1}, {"$set": {"lang." + language + "." + genre + "." + name: url}})
-    else:
-        resp = mycol.update_one({"_id": 1}, {"$set": {
-            "lang." + language + "." + genre + "." + "name": name,
-            "lang." + language + "." + genre + "." + "url": url,
-        }})
+def saveData(language, genre, name, url, description, thumbnailurl):
+    global id
+    id += 1
+    resp = mydb['MediaObject'].insert({"_id": id, "Name": name, "Language": language, "Genre": genre, "url": url, "Views": 0, "Viewers": [
+    ], "Likes": 0, "PeopleLiked": [], "Comments": [{}], "Description": description, "ThumbnailUrl": thumbnailurl})
     print("saved")
     return resp
 
@@ -86,5 +111,5 @@ def queryGenre(genre):
         {"Genre": genre}, {"_id": 1, "Name": 1, "url": 1, "ThumbnailUrl": 1})
     return [resp for resp in resps]
 
-#docs = queryLanguage("English")
+#docs = getContent("1024586167")
 #print([doc for doc in docs])
