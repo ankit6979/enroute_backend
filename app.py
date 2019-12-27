@@ -1,8 +1,7 @@
 # app.py
-from flask import Flask, request, jsonify
-import json
-from mongodb_functions import *
 from flask import Flask, request
+import json
+import mongodb_functions
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
@@ -21,17 +20,19 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     return "<h1>Welcome to our server !!</h1>"
 
+
 @app.route("/map", methods=['POST'])
 def getMap():
     if request.method == 'POST':
         req_json = request.get_json()
         pnr = req_json['pnr']
         response = app.response_class(
-            response=json.dumps(getCoordinates(pnr)),
+            response=json.dumps(mongodb_functions.getCoordinates(pnr)),
             status=200,
             mimetype='application/json'
         )
     return response
+
 
 @app.route("/home", methods=['POST'])
 def home():
@@ -39,11 +40,12 @@ def home():
         req_json = request.get_json()
         pnr = req_json['pnr']
         response = app.response_class(
-            response=json.dumps(getContent(pnr)),
+            response=json.dumps(mongodb_functions.getContent(pnr)),
             status=200,
             mimetype='application/json'
         )
     return response
+
 
 @app.route("/content", methods=['POST'])
 def updateContent():
@@ -55,13 +57,15 @@ def updateContent():
         likeflag = req_json['likeflag']
         comments = req_json['comments']
         anonymousflag = req_json['aflag']
-    
+
         response = app.response_class(
-            response=json.dumps(AddContent(pnr, media_id, viewflag, likeflag, comments, anonymousflag)),
+            response=json.dumps(mongodb_functions.AddContent(
+                pnr, media_id, viewflag, likeflag, comments, anonymousflag)),
             status=200,
             mimetype='application/json'
         )
     return response
+
 
 @app.route("/preferenceSelect", methods=['POST'])
 def updatePreference():
@@ -71,13 +75,15 @@ def updatePreference():
         name = req_json['name']
         lang_pref = req_json['lang_pref']
         genre_pref = req_json['genre_pref']
-    
+
         response = app.response_class(
-            response=json.dumps(userPreference(pnr, name, lang_pref, genre_pref)),
+            response=json.dumps(mongodb_functions.userPreference(
+                pnr, name, lang_pref, genre_pref)),
             status=200,
             mimetype='application/json'
         )
     return response
+
 
 @app.route("/login", methods=['POST'])
 def check():
@@ -86,13 +92,15 @@ def check():
         pnr = req_json['pnr']
         name = req_json['name']
         seatno = req_json['seatno']
-    
+
         response = app.response_class(
-            response=json.dumps(checkUser(pnr, name, seatno)),
+            response=json.dumps(
+                mongodb_functions.checkUser(pnr, name, seatno)),
             status=200,
             mimetype='application/json'
         )
     return response
+
 
 @app.route("/api/uploadFile", methods=['POST'])
 def upload_file():
@@ -120,7 +128,8 @@ def save():
         url = req_json['url']
         description = req_json['description']
         thumbnailurl = req_json['thumbnail']
-        saveData(language, genre, name, url, description, thumbnailurl)
+        mongodb_functions.saveData(
+            language, genre, name, url, description, thumbnailurl)
 
         response = app.response_class(
             response=json.dumps(req_json),
@@ -147,7 +156,7 @@ def getData():
         req_json = request.get_json()
         language = req_json['language']
         genre = req_json['genre']
-        resp = queryData(language, genre)
+        resp = mongodb_functions.queryData(language, genre)
 
     response = app.response_class(
         response=json.dumps(resp),
@@ -155,6 +164,7 @@ def getData():
         mimetype='application/json'
     )
     return response
+
 
 @app.route("/api/deleteData", methods=['POST', 'GET'])
 def delete():
@@ -163,7 +173,7 @@ def delete():
         language = req_json['language']
         genre = req_json['genre']
         name = req_json['name']
-        resp = deleteData(language, genre, name)
+        resp = mongodb_functions.deleteData(language, genre, name)
 
     response = app.response_class(
         response=json.dumps(resp),
@@ -172,11 +182,12 @@ def delete():
     )
     return response
 
+
 @app.route("/genres", methods=['GET'])
 def get_genre():
     if request.method == 'GET':
         genre = request.args.get('genre')
-        resp = queryGenre(genre)
+        resp = mongodb_functions.queryGenre(genre)
         #resp = [{"genre":"Horror","all":50,"few":[{"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english","comments":[{"userName":"Rey","comment":"Star Blood"}]}]},{"genre":"Action","all":50,"few":[{"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english","comments":[{"userName":"Switch","comment":"punchy"}]}]}]
 
     response = app.response_class(
@@ -186,11 +197,12 @@ def get_genre():
     )
     return response
 
+
 @app.route("/languages", methods=['GET'])
 def get_language():
     if request.method == 'GET':
         language = request.args.get('language')
-        resp = queryLanguage(language)
+        resp = mongodb_functions.queryLanguage(language)
         #resp = [{"genre":"Horror","all":50,"few":[{"name":"Star Wars","url":"http://stream.starwars","posterUrl":"http://pic","views":23,"likes":13,"language":"english","comments":[{"userName":"Rey","comment":"  Star Blood"}]}]},{"genre":"Action","all":50,"few":[{"name":"Jumanji","url":"http://stream.jumanji","posterUrl":"http://pic","views":67,"likes":55,"language":"english","comments":[{"userName":"Switch","comment":"punchy"}]}]}]
 
     response = app.response_class(

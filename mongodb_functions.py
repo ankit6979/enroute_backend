@@ -26,7 +26,7 @@ def AddContent(pnr, media_id, viewflag, likeflag, comments, anonymousflag):
 def getContent(pnr):
     languages = mydb['UserData'].find({"PNR": pnr}, {"_id": 0, "Lang_pref": 1})
     genres = mydb['UserData'].find({"PNR": pnr}, {"_id": 0, "Genre_pref": 1})
-    mediaObjects = []
+    # mediaObjects = []
     for lang in languages:
         templang = lang['Lang_pref']
     for gen in genres:
