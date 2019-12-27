@@ -1,8 +1,8 @@
 import os
 import pymongo
 
-user = os.environ('USER')
-passwd = os.environ('PASS')
+user = os.environ['USER']
+passwd = os.environ['PASS']
 
 myclient = pymongo.MongoClient("mongodb+srv://" + user + ":" + passwd +
                                "@cluster0-kfqgc.mongodb.net/CentralEntertainment?retryWrites=true&w=majority")
