@@ -102,13 +102,13 @@ def queryData(language=None, genre=None):
 
 def queryLanguage(language):
     resps = mydb['MediaObject'].find({"Language": language}, {
-                                     "_id": 1, "Name": 1, "Genre": 1, "url": 1, "ThumbnailUrl": 1})
+                                     "_id": 1, "Name": 1, "Genre": 1, "url": 1, "ThumbnailUrl": 1, "Description":1})
     return [resp for resp in resps]
 
 
 def queryGenre(genre):
     resps = mydb['MediaObject'].find(
-        {"Genre": genre}, {"_id": 1, "Name": 1, "url": 1, "ThumbnailUrl": 1})
+        {"Genre": genre}, {"_id": 1, "Name": 1, "url": 1, "ThumbnailUrl": 1, "Description":1})
     return [resp for resp in resps]
 
 #docs = getContent("1024586167")
