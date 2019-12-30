@@ -5,8 +5,13 @@ import mongodb_functions
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
+from flask_socketio import SocketIO
+from EAR_detection import *
+import cv2
 
 app = Flask(__name__)
+
+socketio = SocketIO(app)
 
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -19,6 +24,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/')
 def index():
     return "<h1>Welcome to our server !!</h1>"
+
+@socketio.on('my event', namespace='/ear')
+def handle_my_custom_namespace_event(message):
+    print('received json: ' + str(message))
+    emit('my response', message)
 
 
 @app.route("/map", methods=['POST'])
@@ -216,3 +226,4 @@ def get_language():
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
     app.run(host='0.0.0.0', threaded=True, port=5000)
+    socketio.run(app, host='0.0.0.0', port=30000)
