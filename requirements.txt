@@ -8,3 +8,7 @@ Werkzeug==0.15.6
 pymongo
 dnspython
 flask_cors
+evenlet
+dlib
+cv2
+flask_socketio
