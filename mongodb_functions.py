@@ -4,14 +4,14 @@ import pymongo
 user = os.environ['USER']
 passwd = os.environ['PASS']
 
-myclient = pymongo.MongoClient("mongodb+srv://" + user + ":" + passwd +
-                               "@cluster0-kfqgc.mongodb.net/CentralEntertainment?retryWrites=true&w=majority")
+myclient = pymongo.MongoClient("mongodb+srv://" + user + ":" + passwd +"@cluster0-kfqgc.mongodb.net/CentralEntertainment?retryWrites=true&w=majority")
+#myclient = pymongo.MongoClient("localhost:27017")
 mydb = myclient["CentralEntertainment"]
 mycol = mydb["item"]
 id=17
 
 def getMediaDetails(media_id):
-    resps = mydb['MediaObject'].find({"_id":media_id})
+    resps = mydb["MediaObject"].find({"_id":int(media_id)})
     return [resp for resp in resps]
 
 def getCoordinates(pnr):
