@@ -8,7 +8,11 @@ myclient = pymongo.MongoClient("mongodb+srv://" + user + ":" + passwd +
                                "@cluster0-kfqgc.mongodb.net/CentralEntertainment?retryWrites=true&w=majority")
 mydb = myclient["CentralEntertainment"]
 mycol = mydb["item"]
+id=17
 
+def getMediaDetails(media_id):
+    resps = mydb['MediaObject'].find({"_id":media_id})
+    return [resp for resp in resps]
 
 def getCoordinates(pnr):
     resp = mydb["Map"].find_one({"PNR": pnr}, {"_id": 0})

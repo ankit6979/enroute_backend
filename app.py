@@ -8,8 +8,6 @@ import os
 
 app = Flask(__name__)
 
-socketio = SocketIO(app)
-
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -48,7 +46,7 @@ def home():
     return response
 
 
-@app.route("/content", methods=['POST'])
+@app.route("/content", methods=['POST', 'GET'])
 def updateContent():
     if request.method == 'POST':
         req_json = request.get_json()
@@ -62,6 +60,14 @@ def updateContent():
         response = app.response_class(
             response=json.dumps(mongodb_functions.AddContent(
                 pnr, media_id, viewflag, likeflag, comments, anonymousflag)),
+            status=200,
+            mimetype='application/json'
+        )
+    if request.method == 'GET':
+        media_id = request.args.get('mediaid')
+        resp = mongodb_functions.getMediaDetails(media_id)
+        response = app.response_class(
+            response=json.dumps(resp),
             status=200,
             mimetype='application/json'
         )
