@@ -11,8 +11,8 @@ mycol = mydb["item"]
 id=17
 
 def getMediaDetails(media_id):
-    resps = mydb["MediaObject"].find({"_id":int(media_id)})
-    return [resp for resp in resps]
+    resp = mydb["MediaObject"].find_one({"_id":int(media_id)})
+    return resp
 
 def getCoordinates(pnr):
     resp = mydb["Map"].find_one({"PNR": pnr}, {"_id": 0})
