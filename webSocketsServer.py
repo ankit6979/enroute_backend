@@ -15,6 +15,6 @@ async def sendImage(websocket, path):
 	message = "False"
 	await websocket.send(message)
 
-start_server = websockets.serve(sendImage, "0.0.0.0", 30000)
+start_server = websockets.serve(sendImage, "0.0.0.0")
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()   
