@@ -39,7 +39,7 @@ def sleep_prediction(frame):
                         return True
         return False
 
-if __name__ == main():
+if __name__ == "__main__":
         cap = cv2.VideoCapture(0)
         while True:
                 ret, frame = cap.read()
