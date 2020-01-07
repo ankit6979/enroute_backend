@@ -12,4 +12,4 @@ opencv-python
 websockets
 asyncio
 numpy
-base64
+pybase64
