@@ -8,7 +8,7 @@ Werkzeug==0.15.6
 pymongo
 dnspython
 flask_cors
-opencv-python
+opencv-python==4.1.2
 websockets
 asyncio
 numpy
