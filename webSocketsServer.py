@@ -1,21 +1,21 @@
-import websockets
-import os
-import cv2
-import numpy as np
-import base64
-import time
-import asyncio
-#from EAR_detection import * 
+from flask import Flask, render_template
+from flask_socketio import SocketIO
 
-async def sendImage(websocket, path):
-	receiverStr = await websocket.recv()
-	frame = np.frombuffer(receiverStr, dtype=np.uint8)
-	frame = frame.reshape(480,640,3)
-	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	#val = sleep_prediction(gray)
-	message = "False"
-	await websocket.send(message)
+app = Flask(__name__)
+socketio = SocketIO(app)
 
-start_server = websockets.serve(sendImage, "0.0.0.0", int(os.environ['PORT_SOCKET']))
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()   
+@app.route('/')
+def sessions():
+    print("sessions")
+    #return render_template('session.html')
+
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
+
+@socketio.on('my event', namespace='/ear')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print('received my event: ' + str(json))
+    socketio.emit('my response', json, callback=messageReceived)
+
+if __name__ == '__main__':
+    socketio.run(app,host='0.0.0.0', port =int(os.environ['PORT_SOCKET']), debug=True)
