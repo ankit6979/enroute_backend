@@ -13,4 +13,4 @@ websockets
 asyncio
 numpy
 pybase64
-eventlet
+gevent-websocket
