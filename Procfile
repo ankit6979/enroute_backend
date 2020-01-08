@@ -1,2 +1,2 @@
-web: gunicorn app:app
-web: gunicorn webSocketsServer:app 
+web: gunicorn app:app --preload
+web: gunicorn webSocketsServer:app --preload --timeout 10
