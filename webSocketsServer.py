@@ -1,8 +1,11 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
+import os
 
 app = Flask(__name__)
+app.debug = True
 socketio = SocketIO(app)
+thread =None
 
 @app.route('/')
 def sessions():
@@ -18,4 +21,4 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
     socketio.emit('my response', json, callback=messageReceived)
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get("PORT_SOCKET", 30000)))
